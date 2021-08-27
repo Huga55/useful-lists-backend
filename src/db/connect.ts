@@ -12,6 +12,7 @@ async function connect() {
     log.info("Database connected");
   } catch (error) {
     log.error("db error", error);
+    // TODO
     // eslint-disable-next-line unicorn/no-process-exit
     process.exit(1);
   }

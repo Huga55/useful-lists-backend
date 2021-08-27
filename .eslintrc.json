@@ -6,7 +6,7 @@
     "extends": [
         "plugin:import/typescript",
         "airbnb-base",
-        "plugin:unicorn/recommended",
+        //"plugin:unicorn/recommended",
         "plugin:prettier/recommended",
         "prettier"
     ],
@@ -20,8 +20,8 @@
         "sourceType": "module"
     },
     "plugins": [
-        "prettier",
-        "unicorn"
+        "prettier"
+        //"unicorn"
     ],
     "settings": {
         "import/resolver": {
@@ -44,6 +44,14 @@
             {
                 "ts": "never"
             }
-        ]
+        ],
+        "no-unused-vars": [
+            "warn",
+            {
+                "vars": "all",
+                "varsIgnorePattern": "[I]\\w+"
+            }
+        ],
+        "import/prefer-default-export": "off"
     }
 }
