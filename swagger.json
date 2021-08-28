@@ -1,0 +1,10 @@
+{
+  "swagger": "3.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "UserFul APP API",
+    "description": "My project, second time"
+  },
+  "host": "localhost:7000",
+  "basePath": "/"
+}

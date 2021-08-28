@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import config from "config";
 
 export interface IUserDocument extends Document {
+  _id: string;
   email: string;
   name: string;
   password: string;
