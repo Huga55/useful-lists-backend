@@ -28,13 +28,9 @@ export const createAccessToken = (
   );
 };
 
-export const reIssueAccessToken = async ({
-  refreshToken,
-}: {
-  refreshToken: string;
-}) => {
+export const reIssueAccessToken = async (refreshToken: string) => {
   // Decode the refresh token
-  const { decoded } = decode(refreshToken);
+  const { decoded } = decode(refreshToken, "refreshTokenSecret");
 
   if (!decoded || !get(decoded, "_id")) return false;
 

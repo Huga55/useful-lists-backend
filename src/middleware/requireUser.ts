@@ -8,7 +8,7 @@ const requireUser = (
 ) => {
   const user = get(request, "user");
 
-  if (!user) return response.sendStatus(403);
+  if (!user) return response.status(403).send({ error: "Access is denied" });
 
   return next();
 };
