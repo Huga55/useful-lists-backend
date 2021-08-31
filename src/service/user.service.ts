@@ -4,7 +4,15 @@ import User, { IUserDocument } from "../model/user.model";
 
 export const createUser = async (input: DocumentDefinition<IUserDocument>) => {
   try {
-    return await User.create(input);
+    let newInput;
+    if (input.name) {
+      const isNameExist = await User.findOne({ name: input.name }).lean();
+      if (isNameExist) {
+        newInput = omit(input, "name");
+      }
+    }
+
+    return (await User.create(newInput || input)).toObject();
   } catch (error) {
     throw new Error(error);
   }
@@ -30,5 +38,5 @@ export const validatePassword = async (
 
   if (!isValid) return false;
 
-  return omit(user.toJson(), "password");
+  return omit(user, "password");
 };
