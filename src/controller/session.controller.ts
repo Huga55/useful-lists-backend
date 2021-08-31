@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
-import { sign } from "jsonwebtoken";
-import config from "config";
 import { get } from "lodash";
 import { validatePassword } from "../service/user.service";
-import { createAccessToken, createSession } from "../service/session.service";
+import { createTokensAndSession } from "../service/session.service";
 import { IUserDocument } from "../model/user.model";
 import Session from "../model/session.model";
 
@@ -17,21 +15,13 @@ export const createUsersSessionHandler = async (
     request.body.password
   )) as Omit<IUserDocument, "password"> | null;
 
-  if (!user) return response.status(401).send("Invalid username of password");
+  if (!user)
+    return response.status(401).send({ error: "Invalid username of password" });
 
-  // create session
-  const session = await createSession(
-    user._id,
-    request.get("user-agent") || ""
+  const { accessToken, refreshToken } = await createTokensAndSession(
+    request,
+    user
   );
-
-  // create access token
-  const accessToken = createAccessToken(user, session);
-
-  // create refresh token
-  const refreshToken = sign(session, config.get("refreshTokenSecret"), {
-    expiresIn: config.get("refreshTokenTtl"),
-  });
 
   return response.send({ accessToken, refreshToken });
 };
