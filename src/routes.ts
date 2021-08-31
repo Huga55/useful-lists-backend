@@ -1,8 +1,11 @@
 import { Express, Request, Response } from "express";
-import { createUserHandler } from "./controller/user.controller";
+import {
+  createUserHandler,
+  getUserInfoHandler,
+} from "./controller/user.controller";
 import {
   createUserSchema,
-  createUsersSessionSchema,
+  createUserSessionSchema,
 } from "./schema/user.schema";
 import validateRequest from "./middleware/validateRequest";
 import {
@@ -13,22 +16,26 @@ import {
 import requireUser from "./middleware/requireUser";
 
 export default (app: Express) => {
+  // test
+  app.get("/api/test", (req, res) => {
+    return res.send(true);
+  });
   // register user
   app.post(
-    "/api/user/register",
+    "/api/auth/register",
     validateRequest(createUserSchema),
     createUserHandler
   );
   // login user
   app.post(
-    "/api/user/login",
-    validateRequest(createUsersSessionSchema),
+    "/api/auth/login",
+    validateRequest(createUserSessionSchema),
     createUsersSessionHandler
   );
   // logout
-  app.delete("/api/logout", requireUser, invalidateUsersSessionHandler);
-  // get user info
-  app.get("/api/user");
+  app.delete("/api/auth/logout", requireUser, invalidateUsersSessionHandler);
   // get user's session
   app.get("/api/session", requireUser, getUsersSessionHandler);
+  // get user info
+  app.get("/api/user/info", requireUser, getUserInfoHandler);
 };
