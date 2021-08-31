@@ -1,22 +1,20 @@
 import { NextFunction, Request, Response } from "express";
-import { AnySchema } from "yup";
-import log from "../logger";
+import { validationResult, ValidationChain } from "express-validator";
 
-const validate =
-  (schema: AnySchema) =>
-  async (request: Request, response: Response, next: NextFunction) => {
-    try {
-      await schema.validate({
-        body: request.body,
-        query: request.query,
-        params: request.params,
-      });
+const validateCheck = (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const errors = validationResult(request);
+  if (!errors.isEmpty())
+    return response.status(400).send({ errors: errors.array() });
 
-      return next();
-    } catch (error) {
-      log.error(error);
-      return response.status(400).send(error.errors);
-    }
-  };
+  return next();
+};
+
+const validate = (validateSchema: ValidationChain[]) => {
+  return [...validateSchema, validateCheck];
+};
 
 export default validate;

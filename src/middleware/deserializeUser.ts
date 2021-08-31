@@ -22,6 +22,8 @@ const deserializeUser = async (
   if (decoded) {
     // @ts-ignore TODO
     request.user = decoded;
+
+    return next();
   }
 
   if (expired && refreshToken) {
@@ -29,7 +31,7 @@ const deserializeUser = async (
 
     if (newAccessToken) {
       response.setHeader("x-access-token", newAccessToken);
-
+      // TODO
       const { decoded } = decode(newAccessToken);
 
       // @ts-ignore
@@ -39,3 +41,5 @@ const deserializeUser = async (
 
   return next();
 };
+
+export default deserializeUser;
