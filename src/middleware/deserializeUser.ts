@@ -17,7 +17,7 @@ const deserializeUser = async (
 
   if (!accessToken) return next();
 
-  const { decoded, expired } = decode(accessToken);
+  const { decoded, expired } = decode(accessToken, "accessTokenSecret");
 
   if (decoded) {
     // @ts-ignore TODO
@@ -27,12 +27,12 @@ const deserializeUser = async (
   }
 
   if (expired && refreshToken) {
-    const newAccessToken = await reIssueAccessToken({ refreshToken });
+    const newAccessToken = await reIssueAccessToken(refreshToken);
 
     if (newAccessToken) {
       response.setHeader("x-access-token", newAccessToken);
       // TODO
-      const { decoded } = decode(newAccessToken);
+      const { decoded } = decode(newAccessToken, "accessTokenSecret");
 
       // @ts-ignore
       request.user = decoded;

@@ -4,26 +4,33 @@ import { validatePassword } from "../service/user.service";
 import { createTokensAndSession } from "../service/session.service";
 import { IUserDocument } from "../model/user.model";
 import Session from "../model/session.model";
+import { serverErrorHandler } from "../utils/errorsHandler.utils";
 
 export const createUsersSessionHandler = async (
   request: Request,
   response: Response
 ) => {
-  // validation the email and password
-  const user = (await validatePassword(
-    request.body.emial,
-    request.body.password
-  )) as Omit<IUserDocument, "password"> | null;
+  try {
+    // validation the email and password
+    const user = (await validatePassword(
+      request.body.email,
+      request.body.password
+    )) as Omit<IUserDocument, "password"> | null;
 
-  if (!user)
-    return response.status(401).send({ error: "Invalid username of password" });
+    if (!user)
+      return response
+        .status(401)
+        .send({ error: "Invalid username of password" });
 
-  const { accessToken, refreshToken } = await createTokensAndSession(
-    request,
-    user
-  );
+    const { accessToken, refreshToken } = await createTokensAndSession(
+      request,
+      user
+    );
 
-  return response.send({ accessToken, refreshToken });
+    return response.status(200).send({ accessToken, refreshToken });
+  } catch (e) {
+    serverErrorHandler(e, "createUsersSessionHandler", response);
+  }
 };
 
 export const getUsersSessionHandler = async (
@@ -41,9 +48,13 @@ export const invalidateUsersSessionHandler = async (
   request: Request,
   response: Response
 ) => {
-  const sessionId = get(request, "user.session");
+  try {
+    const sessionId = get(request, "user.session");
 
-  await Session.updateOne({ _id: sessionId }, { value: false });
+    await Session.updateOne({ _id: sessionId }, { value: false });
 
-  return response.sendStatus(200);
+    return response.sendStatus(200);
+  } catch (e) {
+    serverErrorHandler(e, "invalidateUsersSessionHandler", response);
+  }
 };

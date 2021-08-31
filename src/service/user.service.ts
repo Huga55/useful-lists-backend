@@ -30,7 +30,7 @@ export const validatePassword = async (
   email: IUserDocument["email"],
   password: IUserDocument["password"]
 ) => {
-  const user = await User.findOne({ email }).lean();
+  const user = await User.findOne({ email });
 
   if (!user) return false;
 
@@ -38,5 +38,5 @@ export const validatePassword = async (
 
   if (!isValid) return false;
 
-  return omit(user, "password");
+  return omit(user.toObject(), "password");
 };
