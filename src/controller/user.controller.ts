@@ -12,9 +12,7 @@ export const createUserHandler = async (
   try {
     const isUserExist = await User.findOne({ email: request.body.email });
     if (isUserExist) {
-      return response
-        .status(409)
-        .send({ error: "User with this email is already exist" });
+      return response.status(409).send({ error: request.t("409UserExist") });
     }
 
     const user = (await createUser(request.body)) as IUserDocument;

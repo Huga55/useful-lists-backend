@@ -1,6 +1,9 @@
 {
   "test": "test RU",
   "errors": {
-    "409UserExist": "Пользователь с данным email уже существует"
+    "409UserExist": "Пользователь с данным email уже существует",
+    "401InvalidUserOrPassword": "ПОльзователь с данными email или пароль не найден",
+    "500ServerError": "Ой ой... Что-то пошло не так",
+    "403AccessDenied": "В доступе отказано"
   }
 }

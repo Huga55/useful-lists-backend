@@ -21,7 +21,7 @@ export const createUsersSessionHandler = async (
     if (!user)
       return response
         .status(401)
-        .send({ error: "Invalid username of password" });
+        .send({ error: request.t("401InvalidEmailOrPassword") });
 
     const { accessToken, refreshToken } = await createTokensAndSession(
       request,
@@ -30,7 +30,12 @@ export const createUsersSessionHandler = async (
 
     return response.status(200).send({ accessToken, refreshToken });
   } catch (e) {
-    serverErrorHandler(e, "createUsersSessionHandler", response);
+    return serverErrorHandler(
+      e,
+      "createUsersSessionHandler",
+      response,
+      request
+    );
   }
 };
 
@@ -38,11 +43,18 @@ export const getUsersSessionHandler = async (
   request: Request,
   response: Response
 ) => {
-  const userId = get(request, "user.id");
+  try {
+    const userId = get(request, "user.id");
 
-  const sessions = await Session.findOne({ user: userId, valid: true }).lean();
+    const sessions = await Session.findOne({
+      user: userId,
+      valid: true,
+    }).lean();
 
-  return response.send(sessions);
+    return response.send(sessions);
+  } catch (e) {
+    return serverErrorHandler(e, "getUsersSessionHandler", response, request);
+  }
 };
 
 export const invalidateUsersSessionHandler = async (
@@ -56,6 +68,11 @@ export const invalidateUsersSessionHandler = async (
 
     return response.sendStatus(200);
   } catch (e) {
-    serverErrorHandler(e, "invalidateUsersSessionHandler", response);
+    return serverErrorHandler(
+      e,
+      "invalidateUsersSessionHandler",
+      response,
+      request
+    );
   }
 };
