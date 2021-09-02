@@ -1,6 +1,9 @@
 {
   "test": "test EN",
   "errors": {
-    "409UserExist": "User with this email is already exist"
+    "409UserExist": "User with this email is already exist",
+    "401InvalidEmailOrPassword": "User with these email of password was not found",
+    "500ServerError": "Oh oh ... Something went wrong",
+    "403AccessDenied": "Access is denied"
   }
 }
