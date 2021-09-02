@@ -18,7 +18,7 @@ import requireUser from "./middleware/requireUser";
 export default (app: Express) => {
   // test
   app.get("/api/test", (req, res) => {
-    return res.send(true);
+    return res.send(req.t("test"));
   });
   // register user
   app.post(

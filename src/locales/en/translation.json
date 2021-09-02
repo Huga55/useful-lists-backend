@@ -1,0 +1,6 @@
+{
+  "test": "test EN",
+  "errors": {
+    "409UserExist": "User with this email is already exist"
+  }
+}
