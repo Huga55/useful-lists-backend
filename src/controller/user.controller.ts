@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { omit } from "lodash";
 import { createUser } from "../service/user.service";
-import log from "../logger";
 import User, { IUserDocument } from "../model/user.model";
 import { createTokensAndSession } from "../service/session.service";
+import { serverErrorHandler } from "../utils/errorsHandler.utils";
 
 export const createUserHandler = async (
   request: Request,
@@ -23,10 +23,8 @@ export const createUserHandler = async (
     );
 
     return response.status(201).send({ accessToken, refreshToken });
-  } catch (error) {
-    log.error("createUserHandler");
-    log.error(error);
-    return response.status(409).send(error.message);
+  } catch (e) {
+    return serverErrorHandler(e, "createUserHandler", response, request);
   }
 };
 
