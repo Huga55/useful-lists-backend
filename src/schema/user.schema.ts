@@ -1,6 +1,12 @@
 import { check, validationResult } from "express-validator";
 
-const emailSchema = check("email", "Неверный формат email").isEmail();
+const emailSchema = check("email")
+  .isEmail()
+  .withMessage((value, { req }) => req.t("validate.email"))
+  .isLength({ max: 70 })
+  .withMessage((value, { req }) =>
+    req.t("validate.maxLength", { length: 70, input: req.t("inputs.email") })
+  );
 
 const nameSchema = check("name")
   .matches(/^[a-zA-Z0-9]+$/)
