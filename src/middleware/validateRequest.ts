@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult, ValidationChain } from "express-validator";
+import { omit } from "lodash";
 
 const validateCheck = (
   request: Request,
@@ -8,7 +9,9 @@ const validateCheck = (
 ) => {
   const errors = validationResult(request);
   if (!errors.isEmpty())
-    return response.status(400).send({ errors: errors.array() });
+    return response
+      .status(400)
+      .send({ errors: errors.array().map((err) => omit(err, "value")) });
 
   return next();
 };

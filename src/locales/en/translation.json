@@ -11,6 +11,7 @@
   "validate": {
     "nameMatch": "The name can contain only Latin letters and numbers",
     "passwordMatch": "The password can contain only Latin letters and numbers",
+    "email": "Email is invalid",
     "maxLength": "Max length of {{input}} is {{length}}",
     "minLength": "Min length of {{input}} is {{length}}"
   },
