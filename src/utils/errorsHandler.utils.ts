@@ -9,5 +9,7 @@ export const serverErrorHandler = (
 ) => {
   log.info(`error from ${errorPlace}`);
   log.error(error);
-  return response.status(500).send({ error: request.t("500ServerError") });
+  return response
+    .status(500)
+    .send({ error: request.t("errors.500ServerError") });
 };

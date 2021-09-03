@@ -21,7 +21,7 @@ export const createUsersSessionHandler = async (
     if (!user)
       return response
         .status(401)
-        .send({ error: request.t("401InvalidEmailOrPassword") });
+        .send({ error: request.t("errors.401InvalidEmailOrPassword") });
 
     const { accessToken, refreshToken } = await createTokensAndSession(
       request,
@@ -51,7 +51,7 @@ export const getUsersSessionHandler = async (
       valid: true,
     }).lean();
 
-    return response.send(sessions);
+    return response.status(200).send(sessions);
   } catch (e) {
     return serverErrorHandler(e, "getUsersSessionHandler", response, request);
   }
