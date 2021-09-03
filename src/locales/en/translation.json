@@ -2,8 +2,21 @@
   "test": "test EN",
   "errors": {
     "409UserExist": "User with this email is already exist",
+    "409NameExist": "User with this name is already exist",
     "401InvalidEmailOrPassword": "User with these email of password was not found",
     "500ServerError": "Oh oh ... Something went wrong",
-    "403AccessDenied": "Access is denied"
+    "403AccessDenied": "Access is denied",
+    "404incorrectPassword": "Password is invalid"
+  },
+  "validate": {
+    "nameMatch": "The name can contain only Latin letters and numbers",
+    "passwordMatch": "The password can contain only Latin letters and numbers",
+    "maxLength": "Max length of {{input}} is {{length}}",
+    "minLength": "Min length of {{input}} is {{length}}"
+  },
+  "inputs": {
+    "name": "Name",
+    "email": "Email",
+    "password": "Password"
   }
 }

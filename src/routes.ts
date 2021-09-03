@@ -1,9 +1,13 @@
 import { Express } from "express";
 import {
+  changeUserInfoHandler,
+  changeUserPasswordHandler,
   createUserHandler,
   getUserInfoHandler,
 } from "./controller/user.controller";
 import {
+  changeUserInfoSchema,
+  changeUserPasswordSchema,
   createUserSchema,
   createUserSessionSchema,
 } from "./schema/user.schema";
@@ -38,4 +42,16 @@ export default (app: Express) => {
   app.get("/api/session", requireUser, getUsersSessionHandler);
   // get user info
   app.get("/api/user/info", requireUser, getUserInfoHandler);
+  // change user info
+  app.put(
+    "/api/user/info",
+    [requireUser, ...validateRequest(changeUserInfoSchema)],
+    changeUserInfoHandler
+  );
+  // change user password
+  app.put(
+    "/api/user/password",
+    [requireUser, ...validateRequest(changeUserPasswordSchema)],
+    changeUserPasswordHandler
+  );
 };

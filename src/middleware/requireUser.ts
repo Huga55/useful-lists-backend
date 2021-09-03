@@ -9,7 +9,9 @@ const requireUser = (
   const user = get(request, "user");
 
   if (!user)
-    return response.status(403).send({ error: request.t("403AccessDenied") });
+    return response
+      .status(403)
+      .send({ error: request.t("errors.403AccessDenied") });
 
   return next();
 };

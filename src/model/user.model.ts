@@ -1,6 +1,7 @@
 import { Document, model, Schema, HookNextFunction } from "mongoose";
 import bcrypt from "bcrypt";
 import config from "config";
+import { get } from "lodash";
 
 export interface IUserDocument extends Document {
   _id: string;
@@ -32,19 +33,37 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
+async function generatePassword(user: IUserDocument) {
+  // Random additional data
+  const salt = await bcrypt.genSalt(config.get("saltWorkFactor"));
+
+  const hash = await bcrypt.hashSync(user.password, salt);
+
+  return hash;
+}
+
+UserSchema.pre("updateOne", async function (next: HookNextFunction) {
+  // @ts-ignore
+  const data = this.getUpdate();
+  console.log("is there pass", !get(data, "password"));
+  if (!get(data, "password")) return next();
+
+  const hash = await generatePassword(data);
+  // Replace the password with the hash
+  if (hash) data.password = hash;
+
+  return next();
+});
+
 UserSchema.pre("save", async function (next: HookNextFunction) {
   const user = this as IUserDocument;
 
   // only hash the password if it has been modified (or is new)
   if (!user.isModified("password")) return next();
 
-  // Random additional data
-  const salt = await bcrypt.genSalt(config.get("saltWorkFactor"));
-
-  const hash = await bcrypt.hashSync(user.password, salt);
-
+  const hash = await generatePassword(user);
   // Replace the password with the hash
-  user.password = hash;
+  if (hash) user.password = hash;
 
   return next();
 });

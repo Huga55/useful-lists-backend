@@ -2,8 +2,21 @@
   "test": "test RU",
   "errors": {
     "409UserExist": "Пользователь с данным email уже существует",
+    "409NameExist": "Пользователь с данным имененм уже существует",
     "401InvalidUserOrPassword": "ПОльзователь с данными email или пароль не найден",
     "500ServerError": "Ой ой... Что-то пошло не так",
-    "403AccessDenied": "В доступе отказано"
+    "403AccessDenied": "В доступе отказано",
+    "404incorrectPassword": "Неверно введен пароль"
+  },
+  "validate": {
+    "nameMatch": "Имя может содержать только латинские буквы и цифры",
+    "passwordMatch": "Пароль может содержать только латинские буквы и цифры",
+    "maxLength": "Максимальная длина поля {{input}}: {{length}}",
+    "minLength": "Минимальная длина поля {{input}}: {{length}}"
+  },
+  "inputs": {
+    "name": "Имя",
+    "email": "Email",
+    "password": "Пароль"
   }
 }

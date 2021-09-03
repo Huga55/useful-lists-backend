@@ -1,7 +1,7 @@
 import { LeanDocument } from "mongoose";
 import { sign } from "jsonwebtoken";
 import config from "config";
-import { get } from "lodash";
+import { get, pick } from "lodash";
 import { Request } from "express";
 import Session, { ISessionDocument } from "../model/session.model";
 import { IUserDocument } from "../model/user.model";
@@ -22,7 +22,7 @@ export const createAccessToken = (
     | LeanDocument<Omit<IUserDocument, "password">>
 ) => {
   return sign(
-    user,
+    pick(user, ["name", "_id", "email"]),
     config.get("accessTokenSecret"),
     { expiresIn: config.get("accessTokenTtl") } // 15 minutes
   );
