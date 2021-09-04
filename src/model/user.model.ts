@@ -45,7 +45,7 @@ async function generatePassword(user: IUserDocument) {
 UserSchema.pre("updateOne", async function (next: HookNextFunction) {
   // @ts-ignore
   const data = this.getUpdate();
-  console.log("is there pass", !get(data, "password"));
+
   if (!get(data, "password")) return next();
 
   const hash = await generatePassword(data);
