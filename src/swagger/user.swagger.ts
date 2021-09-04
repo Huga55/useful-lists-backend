@@ -15,8 +15,6 @@
  *                  application/json:
  *                      schema:
  *                          $ref: '#/components/schemas/User'
- *          400:
- *              $ref: '#/components/responses/400'
  *          403:
  *              $ref: '#/components/responses/403'
  *          500:

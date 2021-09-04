@@ -53,9 +53,12 @@ export const changeUserInfoHandler = async (
     const { _id } = request.user;
     const newData = request.body;
 
-    const isExist = await User.findOne({ name: newData.name });
+    const isExist = await User.findOne({ name: newData.name }).lean();
+
     if (isExist)
-      response.status(409).send({ error: request.t("409NameExist") });
+      return response
+        .status(409)
+        .send({ error: request.t("errors.409NameExist") });
 
     await User.updateOne({ _id }, { ...newData });
 
