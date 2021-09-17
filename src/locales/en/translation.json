@@ -3,12 +3,16 @@
   "errors": {
     "409UserExist": "User with this email is already exist",
     "409NameExist": "User with this name is already exist",
+    "409SectionNameExist": "Section with this name is already exist",
     "401InvalidEmailOrPassword": "User with these email of password was not found",
     "500ServerError": "Oh oh ... Something went wrong",
     "403AccessDenied": "Access is denied",
-    "404incorrectPassword": "Password is invalid"
+    "404incorrectPassword": "Password is invalid",
+    "404Section": "This section was not found",
+    "limit": "Limit of available {{name]} is {{maxValue}}"
   },
   "validate": {
+    "nameSectionMatch": "Name of section can contain only latin and rus letters, numbers, space",
     "nameMatch": "The name can contain only Latin letters and numbers",
     "passwordMatch": "The password can contain only Latin letters and numbers",
     "email": "Email is invalid",
@@ -18,6 +22,10 @@
   "inputs": {
     "name": "Name",
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "nameSection": "Name of section"
+  },
+  "names": {
+    "section": "sections"
   }
 }

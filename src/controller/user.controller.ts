@@ -8,6 +8,7 @@ import {
 import User, { IUserDocument } from "../model/user.model";
 import { createTokensAndSession } from "../service/session.service";
 import { serverErrorHandler } from "../utils/errorsHandler.utils";
+import { createDefaultSections } from "../service/section.service";
 
 export const createUserHandler = async (
   request: Request,
@@ -27,6 +28,8 @@ export const createUserHandler = async (
       request,
       omit(user, "password")
     );
+
+    await createDefaultSections(user._id);
 
     return response.status(201).send({ accessToken, refreshToken });
   } catch (e) {
