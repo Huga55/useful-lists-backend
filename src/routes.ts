@@ -18,40 +18,58 @@ import {
   invalidateUsersSessionHandler,
 } from "./controller/session.controller";
 import requireUser from "./middleware/requireUser";
+import {
+  changeSectionHandler,
+  createSectionHandler,
+  deleteSectionHandler,
+  getAllSectionsHandler,
+} from "./controller/section.controller";
+import {
+  changeSectionSchema,
+  createSectionSchema,
+} from "./schema/section.schema";
 
 export default (app: Express) => {
   // test
   app.get("/api/test", (req, res) => {
     return res.send(req.t("test"));
   });
-  // register user
+  // AUTH
   app.post(
     "/api/auth/register",
     validateRequest(createUserSchema),
     createUserHandler
   );
-  // login user
   app.post(
     "/api/auth/login",
     validateRequest(createUserSessionSchema),
     createUsersSessionHandler
   );
-  // logout
   app.delete("/api/auth/logout", requireUser, invalidateUsersSessionHandler);
-  // get user's session
   app.get("/api/session", requireUser, getUsersSessionHandler);
-  // get user info
+  // USER
   app.get("/api/user/info", requireUser, getUserInfoHandler);
-  // change user info
   app.put(
     "/api/user/info",
     [requireUser, ...validateRequest(changeUserInfoSchema)],
     changeUserInfoHandler
   );
-  // change user password
   app.put(
     "/api/user/password",
     [requireUser, ...validateRequest(changeUserPasswordSchema)],
     changeUserPasswordHandler
   );
+  // SECTIONS
+  app.get("/api/section", requireUser, getAllSectionsHandler);
+  app.post(
+    "/api/section",
+    [requireUser, ...validateRequest(createSectionSchema)],
+    createSectionHandler
+  );
+  app.put(
+    "/api/section",
+    [requireUser, ...validateRequest(changeSectionSchema)],
+    changeSectionHandler
+  );
+  app.delete("/api/section", [requireUser], deleteSectionHandler);
 };

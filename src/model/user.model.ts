@@ -11,6 +11,8 @@ export interface IUserDocument extends Document {
   createdAt: Date;
   updatedAt: Date;
   comparePassword: (candidatePassword: string) => Promise<boolean>;
+  sectionsMax: number;
+  itemsMax: number;
 }
 
 const UserSchema = new Schema(
@@ -28,6 +30,14 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: true,
+    },
+    sectionsMax: {
+      type: Number,
+      default: config.get("sectionsMax"),
+    },
+    itemsMax: {
+      type: Number,
+      default: config.get("itemsMax"),
     },
   },
   { timestamps: true }
