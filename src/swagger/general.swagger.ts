@@ -13,7 +13,7 @@
  *                  - email
  *                  - password
  *              properties:
- *                  id:
+ *                  _id:
  *                      type: string
  *                      description: id of user
  *                  email:
@@ -22,6 +22,28 @@
  *                  name:
  *                      type: string
  *                      description: name of user
+ *                  sectionsMax:
+ *                      type: number
+ *                      description: max count of sections
+ *                  notesMax:
+ *                      type: number
+ *                      description: max count of elements at one section
+ *          Section:
+ *              type: object
+ *              required:
+ *                  - _id
+ *                  - name
+ *                  - isDefault
+ *              properties:
+ *                  _id:
+ *                      type: string
+ *                      description: id of section
+ *                  name:
+ *                      type: string
+ *                      description: name of section
+ *                  isDefault:
+ *                      type: boolean
+ *                      description: is that default section
  *          Tokens:
  *              type: object
  *              properties:

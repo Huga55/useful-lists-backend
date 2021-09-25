@@ -49,7 +49,9 @@ export const createSectionHandler = async (
 
     const section = (await Section.create({ name, user: _id })).toObject;
 
-    return response.status(200).send(pick(section, ["_id", "name"]));
+    return response
+      .status(200)
+      .send(pick(section, ["_id", "name", "isDefault"]));
   } catch (e) {
     return serverErrorHandler(e, "createSection", response, request);
   }

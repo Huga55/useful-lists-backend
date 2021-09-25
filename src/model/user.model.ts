@@ -12,7 +12,7 @@ export interface IUserDocument extends Document {
   updatedAt: Date;
   comparePassword: (candidatePassword: string) => Promise<boolean>;
   sectionsMax: number;
-  itemsMax: number;
+  notesMax: number;
 }
 
 const UserSchema = new Schema(
@@ -35,9 +35,9 @@ const UserSchema = new Schema(
       type: Number,
       default: config.get("sectionsMax"),
     },
-    itemsMax: {
+    notesMax: {
       type: Number,
-      default: config.get("itemsMax"),
+      default: config.get("notesMax"),
     },
   },
   { timestamps: true }
