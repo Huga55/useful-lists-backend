@@ -71,5 +71,5 @@ export default (app: Express) => {
     [requireUser, ...validateRequest(changeSectionSchema)],
     changeSectionHandler
   );
-  app.delete("/api/section", [requireUser], deleteSectionHandler);
+  app.delete("/api/section/:_id", [requireUser], deleteSectionHandler);
 };
