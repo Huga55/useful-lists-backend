@@ -1,6 +1,5 @@
 import request from "supertest";
 import { Express } from "express";
-import exp from "constants";
 import { accessToken, refreshToken } from "./auth";
 
 const userTest = (app: Express) => {
@@ -26,7 +25,7 @@ const userTest = (app: Express) => {
     const endPoint = "/api/user/info";
     const newName = "newName";
     const repeatName = "name"; // need to change new name every test
-    it.skip("PUT /user/info -> 200 get new user info", async () => {
+    it("PUT /user/info -> 200 get new user info", async () => {
       const response = await request(app)
         .put(endPoint)
         .set({ Authorization: accessToken })

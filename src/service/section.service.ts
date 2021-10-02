@@ -1,9 +1,18 @@
 import Section from "../model/section.model";
 
-export const checkExistSection = async (userId: string, sectionId: string) => {
+interface ISectionChange {
+  _id?: string;
+  name?: string;
+  isDefault?: boolean;
+}
+
+export const checkExistSection = async (
+  userId: string,
+  sectionData: ISectionChange
+) => {
   return Section.findOne({
-    _id: sectionId,
     user: userId,
+    ...sectionData,
   }).lean();
 };
 

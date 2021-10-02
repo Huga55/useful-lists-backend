@@ -105,14 +105,6 @@
  *      responses:
  *          200:
  *              description: section is changed
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              name:
- *                                  type: string
- *                                  description: new name of section
  *          400:
  *              $ref: '#/components/responses/400'
  *          403:
@@ -127,6 +119,16 @@
  *                              error:
  *                                  type: string
  *                                  default: Секция не найдена
+ *          409:
+ *              description: section with this name is already exist
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: string
+ *                                  default: Раздел с данным названием уже существует
  *          500:
  *              $ref: '#/components/responses/500'
  */

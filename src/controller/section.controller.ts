@@ -3,6 +3,7 @@ import { pick } from "lodash";
 import { serverErrorHandler } from "../utils/errorsHandler.utils";
 import Section from "../model/section.model";
 import { checkExistSection } from "../service/section.service";
+import User, { IUserDocument } from "../model/user.model";
 
 export const getAllSectionsHandler = async (
   request: Request,
@@ -11,7 +12,7 @@ export const getAllSectionsHandler = async (
   try {
     const { _id } = request.user;
 
-    const sections = Section.find({ user: _id });
+    const sections = await Section.find({ user: _id }).lean();
 
     return response
       .status(200)
@@ -26,17 +27,19 @@ export const createSectionHandler = async (
   response: Response
 ) => {
   try {
-    const { _id, sectionsMax } = request.user;
+    const { _id } = request.user;
+
+    const { sectionsMax } = (await User.findById(_id).lean()) as IUserDocument;
 
     const countUsersSections = await Section.count({ user: _id });
 
     if (countUsersSections >= sectionsMax)
-      return response.status(405).send(
-        request.t("errors.limit", {
-          name: request.t("name.section"),
+      return response.status(405).send({
+        error: request.t("errors.limit", {
+          name: request.t("names.section"),
           maxValue: sectionsMax,
-        })
-      );
+        }),
+      });
 
     const { name } = request.body;
 
@@ -45,9 +48,9 @@ export const createSectionHandler = async (
     if (isExist)
       return response
         .status(409)
-        .send({ error: request.t("error.409SectionNameExist") });
+        .send({ error: request.t("errors.409SectionNameExist") });
 
-    const section = (await Section.create({ name, user: _id })).toObject;
+    const section = (await Section.create({ name, user: _id })).toObject();
 
     return response
       .status(200)
@@ -66,14 +69,21 @@ export const changeSectionHandler = async (
 
     const { _id, name } = request.body;
 
-    if (!(await checkExistSection(userId, _id)))
+    if (!(await checkExistSection(userId, { _id }))) {
       return response
         .status(404)
         .send({ error: request.t("errors.404Section") });
+    }
 
-    const section = Section.updateOne({ _id, user: userId }, { name }).lean();
+    if (await checkExistSection(userId, { name })) {
+      return response
+        .status(409)
+        .send({ error: request.t("errors.409SectionNameExist") });
+    }
 
-    return response.status(200).send(pick(section, ["name"]));
+    await Section.updateOne({ _id, user: userId }, { name });
+
+    return response.sendStatus(200);
   } catch (e) {
     return serverErrorHandler(e, "changeSection", response, request);
   }
@@ -88,14 +98,14 @@ export const deleteSectionHandler = async (
 
     const { _id } = request.params;
 
-    if (!(await checkExistSection(userId, _id)))
+    if (!(await checkExistSection(userId, { _id, isDefault: false })))
       return response
         .status(404)
         .send({ error: request.t("errors.404Section") });
 
-    Section.deleteOne({ user: userId, _id });
+    await Section.deleteOne({ user: userId, _id });
 
-    return response.status(200);
+    return response.sendStatus(200);
   } catch (e) {
     return serverErrorHandler(e, "deleteSection", response, request);
   }
