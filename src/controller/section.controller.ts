@@ -4,6 +4,7 @@ import { serverErrorHandler } from "../utils/errorsHandler.utils";
 import Section from "../model/section.model";
 import { checkExistSection } from "../service/section.service";
 import User, { IUserDocument } from "../model/user.model";
+import Note from "../model/note.model";
 
 export const getAllSectionsHandler = async (
   request: Request,
@@ -104,6 +105,8 @@ export const deleteSectionHandler = async (
         .send({ error: request.t("errors.404Section") });
 
     await Section.deleteOne({ user: userId, _id });
+
+    await Note.deleteMany({ user: userId, section: _id });
 
     return response.sendStatus(200);
   } catch (e) {
