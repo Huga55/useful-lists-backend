@@ -28,6 +28,13 @@ import {
   changeSectionSchema,
   createSectionSchema,
 } from "./schema/section.schema";
+import {
+  changeNoteHandler,
+  createNoteInfoHandler,
+  deleteNoteHandler,
+  getNoteInfoHandler,
+} from "./controller/note.controller";
+import { changeNoteSchema, createNoteSchema } from "./schema/note.shema";
 
 export default (app: Express) => {
   // test
@@ -71,5 +78,18 @@ export default (app: Express) => {
     [requireUser, ...validateRequest(changeSectionSchema)],
     changeSectionHandler
   );
-  app.delete("/api/section/:_id", [requireUser], deleteSectionHandler);
+  app.delete("/api/section/:_id", requireUser, deleteSectionHandler);
+  // NOTES
+  app.get("/api/note/:_id", requireUser, getNoteInfoHandler);
+  app.post(
+    "/api/note",
+    [requireUser, ...validateRequest(createNoteSchema)],
+    createNoteInfoHandler
+  );
+  app.put(
+    "/api/note",
+    [requireUser, ...validateRequest(changeNoteSchema)],
+    changeNoteHandler
+  );
+  app.delete("/api/note/:_id", requireUser, deleteNoteHandler);
 };
